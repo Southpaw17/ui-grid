@@ -5,12 +5,12 @@ module.exports = function (grunt, options) {
 
     // register before and after test tasks so we don't have to change cli
     // options on the CI server
-    'before-test': ['clean', 'newer:jshint', 'newer:jscs', 'ngtemplates', 'less'], // Have to run less so CSS files are present
+    'before-test': ['clean', 'newer:jshint', 'newer:jscs', 'ngtemplates', 'less', 'copy:font_dist'], // Have to run less so CSS files are present
     'after-test': ['build'],
     'default': ['before-test', 'test:single', 'after-test'],
 
     // Build with no testing
-    'build': ['ngtemplates', 'concat', 'uglify', 'fontello', 'less', 'ngdocs', 'copy:site', 'copy:less_customizer',],
+    'build': ['ngtemplates', 'concat', 'uglify', 'less', 'ngdocs', 'copy:font_dist', 'copy:site', 'copy:less_customizer',],
 
     // Auto-test tasks for development
     'autotest:unit': ['karmangular:start'],
@@ -34,11 +34,6 @@ module.exports = function (grunt, options) {
   if (grunt.option('unit') === false) {
     grunt.log.writeln("Skipping unit testing...");
     baseTasks['dev'].splice(baseTasks['dev'].indexOf('autotest:unit'), 1);
-  }
-
-  if (grunt.option('fontello') === false) {
-    grunt.log.writeln("Skipping fontello...");
-    baseTasks['build'].splice(baseTasks['build'].indexOf('fontello'), 1);
   }
 
   if (process.env.TRAVIS){
